@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Altar Creation App
 
 A React-based application for creating and managing digital altars with a Node.js/Express backend and MySQL database.
@@ -122,3 +123,6 @@ project2/
 - Frontend runs on port 5173
 - CORS is configured to allow frontend-backend communication
 - JWT tokens are stored in localStorage for authentication 
+=======
+# project2
+>>>>>>> de6c625f4e3bf6bfece1c27f47a5fd15ff40ddf0
