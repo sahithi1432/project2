@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { subscriptionAPI } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
+import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 import './ManageSubscriptions.css';
 
 const INITIAL_PLANS = [
@@ -75,7 +76,7 @@ function ManageSubscriptions() {
   const [showPremiumPlans, setShowPremiumPlans] = useState(false);
   const navigate = useNavigate();
   const isAdmin = JSON.parse(localStorage.getItem('user') || '{}').role === 'admin';
-  const menuRef = React.useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     subscriptionAPI.getSubscription()
@@ -84,18 +85,14 @@ function ManageSubscriptions() {
   }, []);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
-      }
-    }
+    const clickHandler = handleClickOutside(menuRef, menuOpen, setMenuOpen);
     if (menuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', clickHandler);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     };
   }, [menuOpen]);
 
@@ -118,12 +115,7 @@ function ManageSubscriptions() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('profilePhoto');
-    navigate('/');
-  };
+  const handleLogout = () => logout(navigate);
 
   // UI for initial Free/Premium selection
   const renderInitialPlans = () => (
@@ -237,7 +229,7 @@ function ManageSubscriptions() {
           <div ref={menuRef} className="menu-dropdown">
             <ul>
               <li>
-                <button onClick={() => { setMenuOpen(false); navigate('/'); }}>🏠 Home</button>
+                <button onClick={() => { setMenuOpen(false); goHome(navigate); }}>🏠 Home</button>
               </li>
               {isAdmin && (
                 <li>

@@ -33,6 +33,7 @@
   transition: all 0.3s ease;
   position: relative;
   border-left: 4px solid transparent;
+  margin: 8px 0;
 }
 
 .admin-sidebar-btn:hover {

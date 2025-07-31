@@ -160,10 +160,7 @@ export const wallAPI = {
   },
 };
 
-// Health check
-export const healthCheck = async () => {
-  return apiRequest('/health');
-};
+
 
 export const userAPI = {
   updateProfile: async (userId, data) => {

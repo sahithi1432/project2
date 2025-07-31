@@ -6,7 +6,8 @@ import { wallAPI } from "../services/api";
 import { altarCategories } from '../assets/altarItems';
 import { subscriptionAPI } from '../services/api';
 import { useAlert } from '../context/AlertContext';
-import { getErrorMessage, getSuccessMessage, getWarningMessage } from '../utils/errorHandler';
+import { getErrorMessage } from '../utils/errorHandler';
+import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 import './Createaltar.css';
 
 function Createaltar({ editModeShare = false }) {
@@ -60,7 +61,6 @@ function Createaltar({ editModeShare = false }) {
       setImages(imgObj);
       setAltarId(altar.id || null);
       setWallName(altar.wall_name || ''); // <-- set wallName from loaded altar
-      console.log('Loaded altar from state:', altar, wallData, imgObj);
     }
   }, [navigate, location.state]);
 
@@ -90,28 +90,20 @@ function Createaltar({ editModeShare = false }) {
   }, [editModeShare, editToken]);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
-      }
-    }
+    const clickHandler = handleClickOutside(menuRef, menuOpen, setMenuOpen);
     if (menuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', clickHandler);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     };
   }, [menuOpen]);
 
 
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/');
-  };
+  const handleLogout = () => logout(navigate);
 
   const [width, setwidth] = useState(800);
   const [height, setheight] = useState(500);
@@ -263,8 +255,6 @@ function Createaltar({ editModeShare = false }) {
         wallData: { ...wallData, interest: interest || '' }
       };
       
-      console.log('Saving altar with requestData:', requestData);
-      
       if (altarId) {
         // Update existing altar
         await wallAPI.updateDesign(altarId, requestData);
@@ -354,7 +344,7 @@ function Createaltar({ editModeShare = false }) {
           <div ref={menuRef} className="menu-dropdown">
             <ul>
               <li>
-                <button onClick={() => { setMenuOpen(false); navigate('/'); }}>🏠 Home</button>
+                <button onClick={() => { setMenuOpen(false); goHome(navigate); }}>🏠 Home</button>
               </li>
               {isAdmin && (
                 <li>

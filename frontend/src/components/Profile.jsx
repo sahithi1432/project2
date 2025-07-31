@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { wallAPI } from '../services/api';
 import { userAPI } from '../services/api';
 import { subscriptionAPI } from '../services/api';
 import { billingAPI } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 import './profile.css';
 import { getApiUrl } from '../config/environment.js';
 
@@ -71,18 +72,14 @@ function Profile() {
 
   // Close menu when clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
-      }
-    }
+    const clickHandler = handleClickOutside(menuRef, menuOpen, setMenuOpen);
     if (menuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', clickHandler);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     };
   }, [menuOpen]);
 
@@ -308,12 +305,7 @@ function Profile() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('profilePhoto');
-    navigate('/');
-  };
+  const handleLogout = () => logout(navigate);
 
   const handleDeleteAccount = async () => {
     if (!window.confirm('Are you sure you want to delete your account?')) return;
@@ -477,7 +469,7 @@ function Profile() {
           <div ref={menuRef} className="profile-menu-dropdown">
             <ul className="profile-menu-list">
               <li>
-                <button className="profile-menu-item" onClick={() => { setMenuOpen(false); navigate('/'); }}>🏠 Home</button>
+                <button className="profile-menu-item" onClick={() => { setMenuOpen(false); goHome(navigate); }}>🏠 Home</button>
               </li>
               {isAdmin && (
                 <li>
@@ -546,7 +538,6 @@ function Profile() {
           >
             🛡️ Privacy
           </button>
-          <button className="settings-tab-btn logout-btn" onClick={handleLogout}>🚪 Logout</button>
         </aside>
         
         <main className="profile-settings-content">

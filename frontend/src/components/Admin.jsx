@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import WallPreview from './WallPreview';
 import { wallAPI } from '../services/api';
 import { adminAPI } from '../services/api';
 import { authAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 import './admin.css';
 import { getApiUrl } from '../config/environment.js';
 
@@ -861,31 +862,22 @@ const sections = [
 export default function Admin() {
   const [active, setActive] = useState('users');
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = React.useRef(null);
+  const menuRef = useRef(null);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
+      useEffect(() => {
+    const clickHandler = handleClickOutside(menuRef, menuOpen, setMenuOpen);
+          if (menuOpen) {
+        document.addEventListener('mousedown', clickHandler);
+      } else {
+        document.removeEventListener('mousedown', clickHandler);
       }
-    }
-    if (menuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+      return () => {
+        document.removeEventListener('mousedown', clickHandler);
+      };
   }, [menuOpen]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('profilePhoto');
-    navigate('/');
-  };
+  const handleLogout = () => logout(navigate);
 
   return (
     <div className="profile-container">
@@ -902,7 +894,7 @@ export default function Admin() {
           <div ref={menuRef} className="menu-dropdown">
             <ul>
               <li>
-                <button onClick={() => { setMenuOpen(false); navigate('/'); }}>🏠 Home</button>
+                <button onClick={() => { setMenuOpen(false); goHome(navigate); }}>🏠 Home</button>
               </li>
               <li>
                 <button onClick={() => { setMenuOpen(false); navigate('/profile'); }}>👤 Profile</button>
@@ -937,8 +929,7 @@ export default function Admin() {
             {s.label}
           </button>
         ))}
-          <button className="settings-tab-btn logout-btn" onClick={handleLogout}>🚪 Logout</button>
-      </aside>
+        </aside>
         
         <main className="profile-settings-content">
         {sections.find(s => s.key === active)?.component}

@@ -1,5 +1,3 @@
-import './WallPreview.css';
-
 function WallPreview({ wallData, width = 160, height = 100 }) {
   if (!wallData) return null;
   // Scale down to fit preview

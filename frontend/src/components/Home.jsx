@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import "./Home.css";
 import { getApiUrl } from '../config/environment.js';
+import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 
 function Home(){
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -20,19 +21,12 @@ function Home(){
     const [contactLoading, setContactLoading] = useState(false);
     const [contactMessage, setContactMessage] = useState('');
 
-    // Debug logging to ensure component is rendering
+    // Component mounted effect
     useEffect(() => {
-        console.log('Home component mounted');
-        console.log('User logged in:', isLoggedIn);
-        console.log('Is admin:', isAdmin);
+        // Component initialization logic can go here if needed
     }, [isLoggedIn, isAdmin]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('profilePhoto');
-        navigate('/Login');
-    };
+    const handleLogout = () => logout(navigate);
 
     // Handle contact form input changes
     const handleContactInputChange = (e) => {
@@ -76,18 +70,14 @@ function Home(){
 
     // Close menu when clicking outside
     useEffect(() => {
-      function handleClickOutside(event) {
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
-          setMenuOpen(false);
-        }
-      }
+      const clickHandler = handleClickOutside(menuRef, menuOpen, setMenuOpen);
       if (menuOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', clickHandler);
       } else {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', clickHandler);
       }
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', clickHandler);
       };
     }, [menuOpen]);
 

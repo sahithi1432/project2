@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Alert.css';
 import { getAlertDuration } from '../config/environment.js';
 

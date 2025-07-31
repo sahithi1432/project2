@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { billingAPI } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
+import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 import './BillingHistory.css';
 
 function BillingHistory() {
@@ -10,30 +11,21 @@ function BillingHistory() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const isAdmin = JSON.parse(localStorage.getItem('user') || '{}').role === 'admin';
-  const menuRef = React.useRef(null);
+  const menuRef = useRef(null);
 
-  React.useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
-      }
-    }
+  useEffect(() => {
+    const clickHandler = handleClickOutside(menuRef, menuOpen, setMenuOpen);
     if (menuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', clickHandler);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickHandler);
     };
   }, [menuOpen]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('profilePhoto');
-    navigate('/');
-  };
+  const handleLogout = () => logout(navigate);
 
   useEffect(() => {
     billingAPI.getHistory()
@@ -57,7 +49,7 @@ function BillingHistory() {
           <div ref={menuRef} className="menu-dropdown">
             <ul>
               <li>
-                <button onClick={() => { setMenuOpen(false); navigate('/'); }}>🏠 Home</button>
+                <button onClick={() => { setMenuOpen(false); goHome(navigate); }}>🏠 Home</button>
               </li>
               {isAdmin && (
                 <li>
