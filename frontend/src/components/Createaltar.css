@@ -1,0 +1,854 @@
+/* Createaltar Component Styles */
+
+/* Main Container */
+.createaltar-container {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+/* Enhanced Sidebar Styles */
+.createaltar-sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.98) 0%, rgba(241, 245, 249, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(99, 102, 241, 0.1);
+  padding: 2rem 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: visible;
+  position: sticky;
+  top: 0;
+  box-shadow: 4px 0 30px rgba(99, 102, 241, 0.08);
+  z-index: 10;
+  position: relative;
+}
+
+.createaltar-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 1;
+}
+
+/* Properties Cards */
+.createaltar-properties-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
+  border-radius: 16px;
+  padding: 0.75rem;
+  margin: 0 1rem 1rem 1rem;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 100;
+  width: calc(100% - 2rem);
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+}
+
+.createaltar-properties-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.createaltar-properties-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+}
+
+.createaltar-properties-card:hover::before {
+  opacity: 1;
+}
+
+.createaltar-properties-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Property Rows */
+.createaltar-property-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.createaltar-property-row:last-child {
+  margin-bottom: 0;
+}
+
+.createaltar-property-row label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+  min-width: 60px;
+}
+
+.createaltar-property-row input,
+.createaltar-property-row select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+  flex: 1;
+  min-width: 0;
+  max-width: 120px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.createaltar-property-row input:focus,
+.createaltar-property-row select:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.createaltar-property-row input[type="color"] {
+  padding: 0.25rem;
+  width: 48px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Upload Image Card */
+.upload-image-card {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px dashed #3b82f6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-image-card:hover {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.upload-image-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #1e40af;
+  padding: 0.25rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.upload-image-icon {
+  font-size: 1.2rem;
+}
+
+/* Categories Section */
+.createaltar-category {
+  margin-bottom: 1.5rem;
+}
+
+.createaltar-category-header {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #374151;
+  margin: 0 1rem 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.createaltar-category-header:hover {
+  background: rgba(99, 102, 241, 0.05);
+  color: #6366f1;
+}
+
+.createaltar-category-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 0 1rem;
+  animation: slideDown 0.3s ease;
+}
+
+.createaltar-item {
+  width: 60px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  padding: 0.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.6) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.createaltar-item:hover {
+  background: rgba(99, 102, 241, 0.1);
+  transform: scale(1.05);
+}
+
+.createaltar-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.createaltar-item:hover img {
+  border-color: #6366f1;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.createaltar-item-name {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Canvas Styles */
+.createaltar-canvas {
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: visible;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.createaltar-canvas-dynamic {
+  transition: all 0.3s ease;
+}
+
+/* Action Buttons */
+.createaltar-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 0.75rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
+}
+
+.createaltar-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.createaltar-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.createaltar-btn:hover::before {
+  left: 100%;
+}
+
+.createaltar-btn:active {
+  transform: translateY(0);
+}
+
+.createaltar-btn-save {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.createaltar-btn-save:hover {
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.createaltar-btn-new {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.createaltar-btn-new:hover {
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.createaltar-btn-download {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+
+.createaltar-btn-download:hover {
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+/* Context Menu */
+.createaltar-context-menu {
+  position: absolute;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  padding: 0.5rem 0;
+  z-index: 9999;
+  min-width: 160px;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.createaltar-context-menu-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #374151;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  display: block;
+  list-style: none;
+  margin: 0;
+}
+
+.createaltar-context-menu-item:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+/* Hidden Input */
+.createaltar-hidden-input {
+  display: none;
+}
+
+/* Main Content Area */
+.createaltar-main-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Canvas Container */
+.createaltar-canvas-container {
+  position: relative;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+/* Action Buttons Container */
+.createaltar-actions {
+  position: absolute;
+  top: 8rem;
+  right: 2rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Subscription Expired Modal */
+.createaltar-expired-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.createaltar-expired-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.createaltar-expired-title {
+  color: #ef4444;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.createaltar-expired-message {
+  color: #374151;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.createaltar-expired-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.createaltar-expired-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+/* Upgrade Modal */
+.createaltar-upgrade-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.createaltar-upgrade-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.createaltar-upgrade-title {
+  color: #2563eb;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.createaltar-upgrade-message {
+  color: #374151;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.createaltar-upgrade-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+  margin-right: 0.75rem;
+}
+
+.createaltar-upgrade-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.createaltar-cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.createaltar-cancel-btn:hover {
+  background: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* Scrollbar Styling */
+.createaltar-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.createaltar-sidebar::-webkit-scrollbar-track {
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 4px;
+  margin: 4px 0;
+}
+
+.createaltar-sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.createaltar-sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Menu Icon Styles */
+.menu-icon {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.5rem;
+  color: #6366f1;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.menu-icon:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+  color: #8b5cf6;
+}
+
+.menu-icon:hover::before {
+  opacity: 1;
+}
+
+.menu-icon:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Menu Dropdown Styles */
+.menu-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  min-width: 200px;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+  transform-origin: top right;
+}
+
+.menu-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-dropdown li {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.menu-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.menu-dropdown button {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-dropdown button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  transition: left 0.3s ease;
+}
+
+.menu-dropdown button:hover {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateX(5px);
+}
+
+.menu-dropdown button:hover::before {
+  left: 0;
+}
+
+.menu-dropdown button:active {
+  transform: translateX(5px) scale(0.98);
+}
+
+/* Menu Container */
+.menu-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .createaltar-sidebar {
+    width: 240px;
+  }
+  
+  .createaltar-actions {
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .createaltar-btn {
+    min-width: 120px;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .createaltar-container {
+    flex-direction: column;
+  }
+  
+  .createaltar-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    position: relative;
+  }
+  
+  .createaltar-main-content {
+    padding: 1rem;
+  }
+  
+  .createaltar-actions {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .createaltar-btn {
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .createaltar-canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .menu-container {
+    top: 15px;
+    right: 15px;
+  }
+  
+  .menu-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+  
+  .menu-dropdown {
+    min-width: 180px;
+  }
+  
+  .menu-dropdown button {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .createaltar-sidebar {
+    max-height: 250px;
+  }
+  
+  .createaltar-properties-card {
+    margin: 0 0.5rem 0.75rem 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .createaltar-category-content {
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .createaltar-item {
+    width: 50px;
+  }
+  
+  .createaltar-item img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .createaltar-btn {
+    min-width: 80px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Properties Popover Dialogs */
+.createaltar-properties-popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  z-index: 2000;
+  background: white;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+  border-radius: 12px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  min-width: 250px;
+  max-width: 300px;
+  overflow: visible;
+}
+
+.createaltar-properties-popover .createaltar-properties-card {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+.createaltar-properties-popover .createaltar-property-row {
+  margin-bottom: 1rem;
+}
+
+.createaltar-properties-popover .createaltar-property-row:last-child {
+  margin-bottom: 0;
+}
+
+.createaltar-properties-popover .createaltar-btn {
+  width: 100%;
+  margin-top: 1rem;
+  min-width: auto;
+}
