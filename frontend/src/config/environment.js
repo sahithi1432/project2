@@ -1,7 +1,8 @@
 // Environment configuration for the frontend
 export const config = {
-  // API Configuration
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+  // API Configuration - In production, API will be served from same domain
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 
+    (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   
   // App Configuration
   APP_NAME: import.meta.env.VITE_APP_NAME || 'Altar Creation App',

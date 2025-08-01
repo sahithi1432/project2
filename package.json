@@ -1,13 +1,12 @@
 {
-  "name": "altar-backend",
+  "name": "altar-app",
   "version": "1.0.0",
-  "description": "Backend for altar creation app",
-  "main": "server.js",
+  "description": "Altar creation app with React frontend and Express backend",
+  "main": "backend/server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "cd ../frontend && npm install && npm run build",
+    "start": "node backend/server.js",
+    "build": "cd frontend && npm install && npm run build",
     "postinstall": "npm run build"
   },
   "dependencies": {
@@ -18,8 +17,5 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.5",
     "nodemailer": "^6.9.7"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
   }
-}
+} 

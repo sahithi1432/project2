@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: altar-app-backend
+    env: node
+    buildCommand: |
+      cd backend && npm install
+      cd ../frontend && npm install && npm run build
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://altar-app-backend.onrender.com
+      - key: PORT
+        value: 10000
+      # Add your AWS database environment variables here
+      - key: DB_HOST
+        value: dreamwall.ckhws8s0oj3p.us-east-1.rds.amazonaws.com
+      - key: DB_USER
+        value: admin
+      - key: DB_PASSWORD
+        value: kotagiri sahithi
+      - key: DB_NAME
+        value: dream_wall
+      - key: DB_PORT
+        value: 3306
+      - key: JWT_SECRET
+        value: your-secret-key
+      - key: EMAIL_SERVICE
+        value: gmail
+      - key: EMAIL_USER
+        value: kotagirisahithi111@gmail.com
+      - key: EMAIL_PASSWORD
+        value: ybricgpneqxjlsap
+      - key: EMAIL_FROM
+        value: Altar App <kotagirisahithi111@gmail.com>
+      - key: MAX_FILE_SIZE
+        value: 20mb 
