@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { wallAPI } from '../services/api';
+import { getErrorMessage } from '../utils/errorHandler';
 import './ViewAltar.css';
 
 function ViewAltar() {
@@ -20,7 +21,7 @@ function ViewAltar() {
         }
         setAltar(data);
       } catch (err) {
-        setError('Failed to load altar.');
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }

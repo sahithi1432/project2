@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import Alert from '../components/Alert';
 import { getAlertDuration } from '../config/environment.js';
 
@@ -47,6 +47,20 @@ export const AlertProvider = ({ children }) => {
   const clearAllAlerts = useCallback(() => {
     setAlerts([]);
   }, []);
+
+  // Listen for custom showAlert events (used by API service for auth errors)
+  useEffect(() => {
+    const handleShowAlert = (event) => {
+      const { type, message, duration } = event.detail;
+      showAlert({ type, message, duration });
+    };
+
+    document.addEventListener('showAlert', handleShowAlert);
+
+    return () => {
+      document.removeEventListener('showAlert', handleShowAlert);
+    };
+  }, [showAlert]);
 
   const value = {
     showAlert,

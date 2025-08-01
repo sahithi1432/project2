@@ -25,9 +25,9 @@ export const getErrorMessage = (error) => {
       case 400:
         return 'Invalid request. Please check your input and try again.';
       case 401:
-        return 'Your session has expired. Please log in again.';
+        return 'You have been logged out due to inactivity. Please log in again to continue.';
       case 403:
-        return 'You do not have permission to perform this action.';
+        return 'Your session has expired. Please log in again to continue.';
       case 404:
         return 'The requested resource was not found.';
       case 409:
@@ -57,9 +57,13 @@ export const getErrorMessage = (error) => {
     return 'Please check your input and ensure all required fields are filled correctly.';
   }
 
-  // Authentication errors
-  if (error?.message?.includes('auth') || error?.message?.includes('login')) {
-    return 'Authentication failed. Please check your credentials and try again.';
+  // Authentication errors - check for specific authentication-related messages
+  if (error?.message?.includes('auth') || 
+      error?.message?.includes('login') || 
+      error?.message?.includes('token') ||
+      error?.message?.includes('expired') ||
+      error?.message?.includes('inactivity')) {
+    return 'You have been logged out due to inactivity. Please log in again to continue.';
   }
 
   // Default error message

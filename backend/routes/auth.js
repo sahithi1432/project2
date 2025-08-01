@@ -27,9 +27,34 @@ const transporter = nodemailer.createTransport({
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'No token provided' });
+  
+  if (!token) {
+    return res.status(401).json({ 
+      message: 'You have been logged out due to inactivity. Please log in again to continue.',
+      code: 'NO_TOKEN'
+    });
+  }
+  
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid or expired token' });
+    if (err) {
+      let message = 'Your session has expired. Please log in again to continue.';
+      let status = 403;
+      
+      // Provide more specific messages based on the error type
+      if (err.name === 'TokenExpiredError') {
+        message = 'You have been logged out due to inactivity. Please log in again to continue.';
+        status = 401;
+      } else if (err.name === 'JsonWebTokenError') {
+        message = 'Your session is invalid. Please log in again to continue.';
+        status = 403;
+      }
+      
+      return res.status(status).json({ 
+        message,
+        code: err.name
+      });
+    }
+    
     req.user = user;
     next();
   });

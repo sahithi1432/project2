@@ -16,6 +16,41 @@ const getAuthHeaders = () => {
   };
 };
 
+// Helper function to handle authentication errors
+const handleAuthError = (status, message) => {
+  // Clear authentication data
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('profilePhoto');
+  
+  // Create user-friendly message based on status
+  let userMessage = '';
+  if (status === 401) {
+    userMessage = 'You have been logged out due to inactivity. Please log in again to continue.';
+  } else if (status === 403) {
+    userMessage = 'Your session has expired. Please log in again to continue.';
+  } else {
+    userMessage = message || 'Authentication failed. Please log in again.';
+  }
+  
+  // Create and dispatch custom event for alert
+  const event = new CustomEvent('showAlert', {
+    detail: {
+      type: 'warning',
+      message: userMessage,
+      duration: 8000
+    }
+  });
+  document.dispatchEvent(event);
+  
+  // Redirect to login page
+  setTimeout(() => {
+    window.location.href = '/Login';
+  }, 1000);
+  
+  throw new Error(userMessage);
+};
+
 // Generic API request function
 const apiRequest = async (endpoint, options = {}) => {
   try {
@@ -34,6 +69,11 @@ const apiRequest = async (endpoint, options = {}) => {
     }
 
     if (!response.ok) {
+      // Handle authentication errors specifically
+      if (response.status === 401 || response.status === 403) {
+        handleAuthError(response.status, data.message);
+      }
+      
       throw new Error(data.message || 'Something went wrong');
     }
 
