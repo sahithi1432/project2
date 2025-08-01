@@ -17,17 +17,41 @@ const PORT = process.env.PORT || 5000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// CORS configuration
+// CORS configuration - More permissive for debugging
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.CORS_ORIGIN, 'https://altar-app-backend.onrender.com', 'https://your-app-name.onrender.com']
-    : process.env.CORS_ORIGIN || 'http://localhost:5173',
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://altar-app-backend.onrender.com',
+      'https://your-app-name.onrender.com',
+      process.env.CORS_ORIGIN
+    ].filter(Boolean);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: process.env.MAX_FILE_SIZE || '20mb' }));
 app.use(express.urlencoded({ limit: process.env.MAX_FILE_SIZE || '20mb', extended: true }));
+
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin || 'No origin'}`);
+  next();
+});
 
 // API routes
 app.use('/api/auth', authRoutes);
