@@ -26,6 +26,7 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:3000',
+      'https://project2-6nmo.onrender.com',
       'https://altar-app-backend.onrender.com',
       'https://your-app-name.onrender.com',
       process.env.CORS_ORIGIN
