@@ -19,7 +19,9 @@ const __dirname = path.dirname(__filename);
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.CORS_ORIGIN, 'https://altar-app-backend.onrender.com', 'https://your-app-name.onrender.com']
+    : process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true
 };
 
@@ -32,7 +34,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/wall', wallRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.json({ message: 'Backend is running successfully!' });
+  res.json({ 
+    message: 'Backend is running successfully!',
+    environment: process.env.NODE_ENV,
+    port: PORT,
+    corsOrigin: process.env.CORS_ORIGIN,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Serve static files from the React app build
