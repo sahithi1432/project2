@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { wallAPI } from '../services/api';
 import { getErrorMessage } from '../utils/errorHandler';
+import { getApiUrl } from '../config/environment';
 import './ViewAltar.css';
 
 function ViewAltar() {
@@ -13,14 +14,26 @@ function ViewAltar() {
   useEffect(() => {
     async function fetchAltar() {
       try {
+        console.log('API Base URL:', getApiUrl());
+        console.log('Fetching altar with params:', { id, token });
         let data;
         if (token) {
+          // Fetch by share token (public access)
+          console.log('Fetching by share token:', token);
           data = await wallAPI.getDesignByToken(token);
-        } else {
+        } else if (id) {
+          // Fetch by ID (requires authentication)
+          console.log('Fetching by ID:', id);
           data = await wallAPI.getDesign(id);
+        } else {
+          setError('No altar ID or token provided');
+          setLoading(false);
+          return;
         }
+        console.log('Altar data received:', data);
         setAltar(data);
       } catch (err) {
+        console.error('Error fetching altar:', err);
         setError(getErrorMessage(err));
       } finally {
         setLoading(false);
