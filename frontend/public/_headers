@@ -1,0 +1,12 @@
+/assets/*
+  Content-Type: application/octet-stream
+  X-Content-Type-Options: nosniff
+
+*.css
+  Content-Type: text/css
+
+*.js
+  Content-Type: application/javascript
+
+*.html
+  Content-Type: text/html 

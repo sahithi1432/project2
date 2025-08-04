@@ -5,6 +5,19 @@ services:
     plan: starter
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
+    headers:
+      - path: /assets/*
+        name: Content-Type
+        value: application/octet-stream
+      - path: /*.css
+        name: Content-Type
+        value: text/css
+      - path: /*.js
+        name: Content-Type
+        value: application/javascript
+      - path: /*.html
+        name: Content-Type
+        value: text/html
     envVars:
       - key: VITE_API_BASE_URL
         sync: false
