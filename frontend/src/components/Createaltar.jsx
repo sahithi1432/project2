@@ -599,21 +599,39 @@ function Createaltar({ editModeShare = false }) {
               size={{ width: imgObj.w, height: imgObj.h }}
               style={{ ...getShapeStyle(imgObj.shape), position: 'absolute', zIndex: imgObj.z || 1 }}
               bounds="parent"
+              minWidth={30}
+              minHeight={30}
+              maxWidth={width - 20}
+              maxHeight={height - 20}
               onDrag={(e, d) => {
+                // Ensure image stays within wall boundaries
+                const maxX = width - imgObj.w;
+                const maxY = height - imgObj.h;
+                const newX = Math.max(0, Math.min(d.x, maxX));
+                const newY = Math.max(0, Math.min(d.y, maxY));
+                
                 setImages(prev => ({
                   ...prev,
-                  [key]: { ...prev[key], x: d.x, y: d.y }
+                  [key]: { ...prev[key], x: newX, y: newY }
                 }));
               }}
               onResize={(e, direction, ref, delta, position) => {
+                // Ensure resized image stays within wall boundaries
+                const newWidth = parseInt(ref.style.width, 10);
+                const newHeight = parseInt(ref.style.height, 10);
+                const maxX = width - newWidth;
+                const maxY = height - newHeight;
+                const newX = Math.max(0, Math.min(position.x, maxX));
+                const newY = Math.max(0, Math.min(position.y, maxY));
+                
                 setImages(prev => ({
                   ...prev,
                   [key]: {
                     ...prev[key],
-                    w: parseInt(ref.style.width, 10),
-                    h: parseInt(ref.style.height, 10),
-                    x: position.x,
-                    y: position.y
+                    w: newWidth,
+                    h: newHeight,
+                    x: newX,
+                    y: newY
                   }
                 }));
               }}

@@ -247,7 +247,7 @@
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   position: relative;
-  overflow: visible;
+  overflow: hidden; /* Prevent images from going outside */
   border: 2px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
 }
@@ -1009,15 +1009,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 300px;
+    min-height: 350px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    margin: 0.5rem;
   }
   
   .createaltar-canvas {
     max-width: 100%;
     width: 100%;
-    height: auto;
-    min-height: 250px;
-    max-height: 400px;
+    height: 300px; /* Fixed height for better visibility */
+    min-height: 300px;
+    max-height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
   }
   
   .createaltar-actions {
@@ -1184,5 +1191,128 @@
   .createaltar-canvas {
     max-width: 100% !important;
     height: auto !important;
+  }
+}
+
+/* Enhanced Mobile Canvas and Image Visibility */
+
+/* Ensure images are clearly visible on mobile */
+@media (max-width: 480px) {
+  .createaltar-canvas img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Improve wall background visibility */
+  .createaltar-canvas {
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+  
+  /* Better positioning for draggable images */
+  .createaltar-canvas .react-rnd {
+    z-index: 10;
+    min-width: 60px;
+    min-height: 60px;
+  }
+  
+  /* Ensure images don't get too small on mobile */
+  .createaltar-canvas .react-rnd img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  /* Improve canvas contrast */
+  .createaltar-canvas {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Medium mobile screens */
+@media (max-width: 767px) and (min-width: 481px) {
+  .createaltar-canvas {
+    height: 350px;
+    min-height: 350px;
+    max-height: 400px;
+  }
+  
+  .createaltar-canvas img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .createaltar-canvas .react-rnd {
+    min-width: 80px;
+    min-height: 80px;
+  }
+}
+
+/* Landscape orientation improvements */
+@media (max-width: 767px) and (orientation: landscape) {
+  .createaltar-canvas {
+    height: 250px;
+    min-height: 250px;
+    max-height: 300px;
+  }
+  
+  .createaltar-canvas-container {
+    min-height: 300px;
+  }
+}
+
+/* Enhanced Wall Boundary Constraints */
+
+/* Visual boundary indicator */
+.createaltar-canvas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure images stay within boundaries */
+.createaltar-canvas .react-rnd {
+  position: absolute;
+  z-index: 10;
+}
+
+/* Prevent images from being dragged outside */
+.createaltar-canvas .react-rnd img {
+  pointer-events: none;
+}
+
+/* Better visual feedback for draggable images */
+.createaltar-canvas .react-rnd:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile-specific boundary constraints */
+@media (max-width: 480px) {
+  .createaltar-canvas {
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+  }
+  
+  .createaltar-canvas::before {
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+  }
+  
+  .createaltar-canvas .react-rnd {
+    min-width: 40px;
+    min-height: 40px;
   }
 }
