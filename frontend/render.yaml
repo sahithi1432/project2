@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: altar-frontend
+    env: static
+    plan: starter
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false
+      - key: VITE_APP_NAME
+        value: Altar Creation App
+      - key: VITE_APP_VERSION
+        value: 1.0.0
+      - key: VITE_ALERT_DURATION
+        value: 5000
+      - key: VITE_DEV_MODE
+        value: false 
