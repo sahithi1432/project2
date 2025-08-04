@@ -1,5 +1,13 @@
 import { altarCategories } from '../assets/altarItems';
 
+// Function to get shape style (same as in Createaltar component)
+const getShapeStyle = (shape) => {
+  if (shape === "circle") return { borderRadius: "50%" };
+  if (shape === "ellipse") return { borderRadius: "50% / 40%" };
+  if (shape === "rounded") return { borderRadius: 20 };
+  return { borderRadius: 0 };
+};
+
 // Function to fix image paths from saved altar data
 const fixImagePaths = (wallData) => {
   if (!wallData) return wallData;
@@ -69,12 +77,14 @@ function WallPreview({ wallData, width = 160, height = 100 }) {
             key={i}
             src={img.src}
             alt=""
-            className={`wall-preview-img${img.shape === "circle" ? " wall-preview-img-circle" : ""}`}
             style={{
+              position: 'absolute',
               left: (img.x || 0) * scaleX,
               top: (img.y || 0) * scaleY,
               width: (img.w || 100) * scaleX,
               height: (img.h || 100) * scaleY,
+              objectFit: 'cover',
+              ...getShapeStyle(img.shape) // Use the same shape style as Createaltar
             }}
           />
         ) : null
