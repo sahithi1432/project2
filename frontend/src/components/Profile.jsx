@@ -285,10 +285,10 @@ function Profile() {
       let link = '';
       if (mode === 'view') {
         const { share_token } = await wallAPI.generateShareToken(altar.id);
-        link = `${window.location.origin}/altar/shared/${share_token}`;
+        link = `${window.location.origin}/#/altar/shared/${share_token}`;
       } else if (mode === 'edit') {
         const { edit_token } = await wallAPI.generateEditToken(altar.id);
-        link = `${window.location.origin}/altar/edit/${edit_token}`;
+        link = `${window.location.origin}/#/altar/edit/${edit_token}`;
       }
       setShareModal({ ...shareModal, mode, link });
     } catch (err) {

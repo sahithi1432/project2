@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Home from "./components/Home";
