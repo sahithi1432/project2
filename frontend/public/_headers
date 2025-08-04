@@ -9,4 +9,15 @@
   Content-Type: application/javascript
 
 *.html
-  Content-Type: text/html 
+  Content-Type: text/html
+
+/altar/*
+  Cache-Control: no-cache
+  X-Frame-Options: DENY
+
+/viewaltar/*
+  Cache-Control: no-cache
+  X-Frame-Options: DENY
+
+/*
+  X-Frame-Options: DENY 

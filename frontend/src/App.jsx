@@ -11,6 +11,7 @@ import Admin from "./components/Admin";
 import ViewAltar from "./components/ViewAltar";
 import ManageSubscriptions from "./components/ManageSubscriptions";
 import BillingHistory from "./components/BillingHistory";
+import DebugRoute from "./components/DebugRoute";
 import { AlertProvider } from "./context/AlertContext";
 import "./App.css";
 
@@ -175,6 +176,9 @@ function App(){
               {/* Public Routes - No Authentication Required */}
               <Route path="/altar/shared/:token" element={<ViewAltar />} />
               <Route path="/altar/edit/:editToken" element={<Createaltar editModeShare={true} />} />
+              
+              {/* Debug Route */}
+              <Route path="/debug" element={<DebugRoute />} />
             </Routes>
           </AutoLogoutWrapper>
         </Router>
