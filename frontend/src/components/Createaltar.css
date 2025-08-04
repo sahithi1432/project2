@@ -247,9 +247,11 @@
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   position: relative;
-  overflow: hidden; /* Prevent images from going outside */
+  overflow: auto; /* Allow scrolling to see all images */
   border: 2px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.3) rgba(99, 102, 241, 0.1);
 }
 
 .createaltar-canvas-dynamic {
@@ -1023,8 +1025,10 @@
     min-height: 300px;
     max-height: 350px;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: auto; /* Allow scrolling to see all images */
     position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.3) rgba(99, 102, 241, 0.1);
   }
   
   .createaltar-actions {
@@ -1241,6 +1245,9 @@
     height: 350px;
     min-height: 350px;
     max-height: 400px;
+    overflow: auto; /* Allow scrolling to see all images */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.3) rgba(99, 102, 241, 0.1);
   }
   
   .createaltar-canvas img {
@@ -1261,6 +1268,9 @@
     height: 250px;
     min-height: 250px;
     max-height: 300px;
+    overflow: auto; /* Allow scrolling to see all images */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.3) rgba(99, 102, 241, 0.1);
   }
   
   .createaltar-canvas-container {
@@ -1387,4 +1397,29 @@
     width: 50px;
     height: 50px;
   }
+}
+
+/* Canvas Scrollbar Styling */
+.createaltar-canvas::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.createaltar-canvas::-webkit-scrollbar-track {
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 4px;
+}
+
+.createaltar-canvas::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.createaltar-canvas::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
+}
+
+.createaltar-canvas::-webkit-scrollbar-corner {
+  background: rgba(99, 102, 241, 0.1);
 }
