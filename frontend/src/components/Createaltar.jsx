@@ -10,6 +10,48 @@ import { getErrorMessage } from '../utils/errorHandler';
 import { logout, goHome, handleClickOutside } from '../utils/authUtils.js';
 import './Createaltar.css';
 
+// Function to fix image paths from saved altar data
+const fixImagePaths = (wallData) => {
+  if (!wallData) return wallData;
+  
+  // Create a mapping of old paths to new imported URLs
+  const pathMapping = {
+    '/src/assets/defaults/table.png': altarCategories.find(cat => cat.name === 'Tables')?.items[0]?.src,
+    '/src/assets/defaults/frame.png': altarCategories.find(cat => cat.name === 'Frames')?.items[0]?.src,
+    '/src/assets/defaults/frame4.png': altarCategories.find(cat => cat.name === 'Frames')?.items[1]?.src,
+    '/src/assets/defaults/garland1.png': altarCategories.find(cat => cat.name === 'Garlands')?.items[0]?.src,
+    '/src/assets/defaults/candle1.png': altarCategories.find(cat => cat.name === 'Candles')?.items[0]?.src,
+    '/src/assets/defaults/wall.jpeg': altarCategories.find(cat => cat.name === 'Background')?.items[0]?.src,
+    '/src/assets/defaults/wall1.webp': altarCategories.find(cat => cat.name === 'Background')?.items[1]?.src,
+    '/src/assets/defaults/wall2.jpg': altarCategories.find(cat => cat.name === 'Background')?.items[2]?.src,
+    '/src/assets/defaults/wall3.webp': altarCategories.find(cat => cat.name === 'Background')?.items[3]?.src,
+    '/src/assets/defaults/wall4.webp': altarCategories.find(cat => cat.name === 'Background')?.items[4]?.src,
+  };
+
+  // Fix wall background
+  if (wallData.wallBg && pathMapping[wallData.wallBg]) {
+    wallData.wallBg = pathMapping[wallData.wallBg];
+  }
+
+  // Fix images
+  if (wallData.images) {
+    if (Array.isArray(wallData.images)) {
+      wallData.images = wallData.images.map(img => ({
+        ...img,
+        src: pathMapping[img.src] || img.src
+      }));
+    } else if (typeof wallData.images === 'object') {
+      Object.keys(wallData.images).forEach(key => {
+        if (wallData.images[key].src && pathMapping[wallData.images[key].src]) {
+          wallData.images[key].src = pathMapping[wallData.images[key].src];
+        }
+      });
+    }
+  }
+
+  return wallData;
+};
+
 function Createaltar({ editModeShare = false }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,21 +84,23 @@ function Createaltar({ editModeShare = false }) {
     const altar = location.state?.altar;
     if (altar && altar.wall_data) {
       const wallData = typeof altar.wall_data === 'string' ? JSON.parse(altar.wall_data) : altar.wall_data;
-      setwidth(wallData.width || 800);
-      setheight(wallData.height || 500);
-                setcolor(wallData.color || "#f8fafc");
-      setWallBg(wallData.wallBg || null);
-      setshape(wallData.shape || "rectangle");
-      setImgWidth(wallData.imgwidth || 100);
-      setImgHeight(wallData.imgheight || 100);
+      // Fix image paths for loaded altar data
+      const fixedWallData = fixImagePaths(wallData);
+      setwidth(fixedWallData.width || 800);
+      setheight(fixedWallData.height || 500);
+      setcolor(fixedWallData.color || "#f8fafc");
+      setWallBg(fixedWallData.wallBg || null);
+      setshape(fixedWallData.shape || "rectangle");
+      setImgWidth(fixedWallData.imgwidth || 100);
+      setImgHeight(fixedWallData.imgheight || 100);
       // Fix: handle both array and object for images
       let imgObj = {};
-      if (Array.isArray(wallData.images)) {
-        wallData.images.forEach((img, idx) => {
+      if (Array.isArray(fixedWallData.images)) {
+        fixedWallData.images.forEach((img, idx) => {
           imgObj[idx] = { ...img };
         });
-      } else if (typeof wallData.images === 'object' && wallData.images !== null) {
-        imgObj = { ...wallData.images };
+      } else if (typeof fixedWallData.images === 'object' && fixedWallData.images !== null) {
+        imgObj = { ...fixedWallData.images };
       }
       setImages(imgObj);
       setAltarId(altar.id || null);
@@ -70,16 +114,18 @@ function Createaltar({ editModeShare = false }) {
       wallAPI.getDesignByEditToken(editToken).then((altar) => {
         if (altar && altar.wall_data) {
           const wallData = typeof altar.wall_data === 'string' ? JSON.parse(altar.wall_data) : altar.wall_data;
-          setwidth(wallData.width || 800);
-          setheight(wallData.height || 500);
-          setcolor(wallData.color || "#f8fafc");
-          setWallBg(wallData.wallBg || null);
-          setshape(wallData.shape || "rectangle");
-          setImgWidth(wallData.imgwidth || 100);
-          setImgHeight(wallData.imgheight || 100);
+          // Fix image paths for loaded altar data
+          const fixedWallData = fixImagePaths(wallData);
+          setwidth(fixedWallData.width || 800);
+          setheight(fixedWallData.height || 500);
+          setcolor(fixedWallData.color || "#f8fafc");
+          setWallBg(fixedWallData.wallBg || null);
+          setshape(fixedWallData.shape || "rectangle");
+          setImgWidth(fixedWallData.imgwidth || 100);
+          setImgHeight(fixedWallData.imgheight || 100);
           setImages(
             Object.fromEntries(
-              Object.entries(wallData.images || {}).map(([key, img]) => [key, { ...img, src: img.src }])
+              Object.entries(fixedWallData.images || {}).map(([key, img]) => [key, { ...img, src: img.src }])
             )
           );
           setAltarId(altar.id || null);
