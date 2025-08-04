@@ -1,4 +1,5 @@
 // Import images for Vite to process them correctly
+// Updated for production deployment - ensure proper image loading
 import tableImg from './defaults/table.png';
 import frame1Img from './defaults/frame.png';
 import frame2Img from './defaults/frame4.png';
