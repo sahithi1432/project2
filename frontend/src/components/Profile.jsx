@@ -558,8 +558,8 @@ function Profile() {
                     <button onClick={handleDeletePhoto} className="profile-delete-photo-btn">Delete</button>
                   )}
                 </div>
-                <h2 className="profile-title">Profile</h2>
               </div>
+              <h2 className="profile-title">Profile</h2>
               
               <form id="profile-form" onSubmit={handleSave} className="profile-form">
                 <label className="profile-form-label">Username</label>
