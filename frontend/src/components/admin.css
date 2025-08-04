@@ -6,6 +6,26 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Wall Preview Styles */
+.wall-preview {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wall-preview-img {
+  position: absolute;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wall-preview-img-circle {
+  border-radius: 50%;
+}
+
 /* Sidebar Styles */
 .admin-sidebar {
   width: 320px;
