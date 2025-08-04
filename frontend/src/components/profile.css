@@ -497,6 +497,10 @@
 .profile-avatar-section {
   text-align: center;
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
 .profile-avatar {
@@ -506,14 +510,14 @@
   object-fit: cover;
   border: 4px solid #8B5CF6;
   box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Remove bottom margin since we're using flexbox gap */
 }
 
 .profile-avatar-buttons {
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Remove bottom margin since we're using flexbox gap */
 }
 
 .profile-upload-label {
@@ -1815,6 +1819,21 @@
   .profile-avatar {
     width: 100px;
     height: 100px;
+  }
+  
+  .profile-avatar-section {
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  
+  .profile-avatar-buttons {
+    gap: 8px;
+  }
+  
+  .profile-upload-label,
+  .profile-delete-photo-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
   
   .profile-title {
