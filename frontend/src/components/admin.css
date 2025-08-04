@@ -1544,3 +1544,275 @@
 .analytics-card .change.negative {
   color: #ef4444;
 }
+
+/* Enhanced Responsive Design for Admin Panel */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+  .admin-sidebar {
+    width: 320px;
+  }
+  
+  .admin-main-content {
+    margin-left: 320px;
+    padding: 2rem 3rem;
+  }
+  
+  .admin-table {
+    font-size: 1rem;
+  }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .admin-sidebar {
+    width: 280px;
+  }
+  
+  .admin-main-content {
+    margin-left: 280px;
+    padding: 1.5rem 2rem;
+  }
+  
+  .admin-table {
+    font-size: 0.9rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 1rem 0.75rem;
+  }
+  
+  .admin-table .design-preview {
+    gap: 0.75rem;
+    max-width: 350px;
+  }
+  
+  .admin-table .design-item {
+    min-width: 120px;
+  }
+  
+  .add-user-modal-dialog {
+    min-width: 500px;
+    max-width: 600px;
+  }
+}
+
+/* Small screens (480px to 767px) */
+@media (max-width: 767px) and (min-width: 481px) {
+  .admin-dashboard-container {
+    flex-direction: column;
+  }
+  
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .admin-main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+  
+  .admin-table {
+    font-size: 0.85rem;
+    border-radius: 12px;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 0.75rem 0.5rem;
+  }
+  .admin-table .design-preview {
+    gap: 0.5rem;
+    max-width: 300px;
+  }
+
+  .admin-table .design-item {
+    min-width: 100px;
+  }
+
+  .admin-table .plan-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .add-user-modal-dialog {
+    min-width: 90vw;
+    margin: 1rem;
+  }
+  
+  .admin-search-input {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  .admin-export-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Extra small screens (up to 480px) */
+@media (max-width: 480px) {
+  .admin-dashboard-container {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 0.75rem;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  .admin-main-content {
+    margin-left: 0;
+    padding: 0.75rem;
+    flex: 1;
+  }
+  
+  .admin-table {
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .admin-table .design-preview {
+    gap: 0.25rem;
+    max-width: 250px;
+  }
+
+  .admin-table .design-item {
+    min-width: 80px;
+  }
+
+  .admin-table .plan-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+  }
+  
+  .admin-search-input {
+    font-size: 0.8rem;
+    padding: 0.625rem 0.875rem;
+    margin-bottom: 1rem;
+  }
+  
+  .admin-export-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    min-width: 80px;
+  }
+  
+  .add-user-modal-dialog {
+    min-width: 95vw;
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .add-user-input {
+    font-size: 0.8rem;
+    padding: 0.625rem 0.875rem;
+  }
+  
+  .add-user-btn {
+    font-size: 0.8rem;
+    padding: 0.625rem 1rem;
+  }
+  
+  .admin-main-content h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Improve touch targets for mobile */
+  .admin-export-btn,
+  .add-user-btn,
+  .settings-tab-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better table scrolling on mobile */
+  .admin-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .admin-table {
+    min-width: 600px; /* Ensure table doesn't get too cramped */
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .admin-sidebar {
+    max-height: 200px;
+  }
+  
+  .admin-main-content {
+    padding: 0.5rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .admin-export-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .admin-table .design-item img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar-btn,
+  .admin-export-btn,
+  .add-user-btn,
+  .settings-tab-btn {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .admin-sidebar,
+  .menu-container,
+  .admin-export-btn {
+    display: none !important;
+  }
+  
+  .admin-main-content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .admin-table {
+    border: 1px solid #000 !important;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    border: 1px solid #ccc !important;
+  }
+}

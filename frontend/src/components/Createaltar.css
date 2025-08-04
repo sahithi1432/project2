@@ -852,3 +852,337 @@
   margin-top: 1rem;
   min-width: auto;
 }
+
+/* Enhanced Responsive Design for Createaltar */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+  .createaltar-sidebar {
+    width: 320px;
+  }
+  
+  .createaltar-main-content {
+    padding: 2rem 3rem;
+  }
+  
+  .createaltar-canvas {
+    max-width: 900px;
+    max-height: 600px;
+  }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .createaltar-sidebar {
+    width: 260px;
+  }
+  
+  .createaltar-main-content {
+    padding: 1.5rem 2rem;
+  }
+  
+  .createaltar-canvas {
+    max-width: 700px;
+    max-height: 500px;
+  }
+  
+  .createaltar-actions {
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .createaltar-btn {
+    min-width: 130px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small screens (480px to 767px) */
+@media (max-width: 767px) and (min-width: 481px) {
+  .createaltar-container {
+    flex-direction: column;
+  }
+  
+  .createaltar-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    position: relative;
+    padding: 1rem;
+  }
+  
+  .createaltar-main-content {
+    padding: 1rem;
+    flex: 1;
+  }
+  
+  .createaltar-actions {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+  }
+  
+  .createaltar-btn {
+    min-width: 110px;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem;
+  }
+  
+  .createaltar-canvas {
+    max-width: 100%;
+    height: auto;
+    min-height: 300px;
+  }
+  
+  .createaltar-properties-card {
+    margin: 0 0.75rem 1rem 0.75rem;
+  }
+  
+  .createaltar-category-content {
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+  }
+  
+  .createaltar-item {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .createaltar-item img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .menu-container {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .menu-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  .menu-dropdown {
+    min-width: 160px;
+    right: 0;
+  }
+  
+  .menu-dropdown button {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Extra small screens (up to 480px) */
+@media (max-width: 480px) {
+  .createaltar-container {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .createaltar-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    position: relative;
+    padding: 0.75rem;
+    overflow-y: auto;
+  }
+  
+  .createaltar-main-content {
+    padding: 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .createaltar-canvas-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+  }
+  
+  .createaltar-canvas {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    max-height: 400px;
+  }
+  
+  .createaltar-actions {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .createaltar-btn {
+    width: 100%;
+    max-width: 200px;
+    min-width: auto;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    margin: 0.25rem 0;
+  }
+  
+  .createaltar-properties-card {
+    margin: 0 0.5rem 0.75rem 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .createaltar-property-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+  
+  .createaltar-property-row label {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .createaltar-property-row input,
+  .createaltar-property-row select {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+  
+  .createaltar-category-content {
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .createaltar-item {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .createaltar-item img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .createaltar-item-name {
+    font-size: 0.7rem;
+  }
+  
+  .createaltar-category-header {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .createaltar-properties-title {
+    font-size: 0.8rem;
+  }
+  
+  .menu-container {
+    top: 8px;
+    right: 8px;
+    z-index: 1000;
+  }
+  
+  .menu-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  
+  .menu-dropdown {
+    min-width: 140px;
+    right: 0;
+    top: 45px;
+  }
+  
+  .menu-dropdown button {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Improve touch targets for mobile */
+  .createaltar-item,
+  .createaltar-btn,
+  .menu-icon,
+  .menu-dropdown button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better spacing for mobile */
+  .createaltar-sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .createaltar-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.3);
+    border-radius: 2px;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .createaltar-sidebar {
+    max-height: 200px;
+  }
+  
+  .createaltar-canvas {
+    min-height: 200px;
+    max-height: 300px;
+  }
+  
+  .createaltar-actions {
+    margin: 0.5rem 0;
+  }
+  
+  .createaltar-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .createaltar-item img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .createaltar-properties-card,
+  .createaltar-item,
+  .createaltar-btn,
+  .menu-icon {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .createaltar-sidebar,
+  .createaltar-actions,
+  .menu-container {
+    display: none !important;
+  }
+  
+  .createaltar-canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
