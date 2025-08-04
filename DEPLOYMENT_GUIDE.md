@@ -3,9 +3,9 @@
 ## Prerequisites
 
 1. **Database Setup**: You'll need a MySQL database. You can use:
-   - AWS RDS (recommended for production)
    - PlanetScale (good for free tier)
    - Railway
+   - Clever Cloud
    - Or any other MySQL provider
 
 2. **Email Service**: Set up Gmail App Password for email functionality
@@ -14,50 +14,35 @@
 
 ## Step-by-Step Deployment Process
 
-### Step 1: AWS Database Setup
+### Step 1: Database Setup
 
-1. **AWS RDS MySQL Setup**:
-   - Go to [AWS RDS Console](https://console.aws.amazon.com/rds/)
-   - Click "Create database"
-   - Choose "Standard create" and "MySQL"
-   - Select "Free tier" (if available) or choose appropriate instance
-   - Configure settings:
-     - **DB instance identifier**: `altar-db` (or your preferred name)
-     - **Master username**: `admin` (or your preferred username)
-     - **Master password**: Create a strong password
-     - **DB instance class**: `db.t3.micro` (free tier) or appropriate size
-     - **Storage**: 20 GB (minimum for free tier)
-     - **Multi-AZ deployment**: No (for free tier)
-     - **Public access**: Yes (for Render to connect)
-     - **VPC security group**: Create new or use existing
-     - **Database name**: `virtual_wall_decor`
-   - Click "Create database"
+1. **Choose a Database Provider**:
+   - **PlanetScale** (Recommended for free tier):
+     - Go to [PlanetScale](https://planetscale.com)
+     - Sign up and create a new database
+     - Choose MySQL as the database type
+     - Note down your connection details
+   
+   - **Railway**:
+     - Go to [Railway](https://railway.app)
+     - Create a new MySQL database
+     - Get your connection string
 
-2. **Configure Security Group**:
-   - Go to EC2 → Security Groups
-   - Find your RDS security group
-   - Add inbound rule:
-     - Type: MySQL/Aurora
-     - Port: 3306
-     - Source: 0.0.0.0/0 (or specific IP ranges for security)
+   - **Clever Cloud**:
+     - Go to [Clever Cloud](https://clever-cloud.com)
+     - Create a MySQL database
+     - Get your connection details
 
-3. **Get Connection Details**:
-   - Note down your endpoint URL (e.g., `altar-db.abc123.us-east-1.rds.amazonaws.com`)
-   - Username: `admin` (or what you set)
-   - Password: (what you created)
-   - Database: `virtual_wall_decor`
-   - Port: 3306
-
-4. **Database Schema**: Run the SQL commands from `database_schema.sql` in your AWS RDS database
+2. **Database Schema**: Run the SQL commands from `database_schema.sql` in your chosen database
 
 ### Step 2: Environment Variables Setup
 
 You'll need to set these environment variables in Render:
 
 **Database Configuration:**
-- `DB_HOST` - Your AWS RDS endpoint (e.g., `altar-db.abc123.us-east-1.rds.amazonaws.com`)
-- `DB_USER` - Your RDS master username (e.g., `admin`)
-- `DB_PASSWORD` - Your RDS master password
+- `DB_HOST` - Your database host (e.g., `aws.connect.psdb.cloud` for PlanetScale)
+- `DB_USER` - Your database username
+- `DB_PASSWORD` - Your database password
 - `DB_NAME` - `virtual_wall_decor`
 - `DB_PORT` - 3306
 
@@ -129,11 +114,11 @@ After deployment, update your frontend environment variables:
    - Verify Node.js version compatibility
 
 2. **Database Connection Issues**:
-   - Verify AWS RDS credentials
-   - Check if RDS security group allows connections from Render
+   - Verify database credentials
+   - Check if database allows connections from Render
    - Ensure database schema is created
-   - Verify RDS instance is publicly accessible
-   - Check if RDS endpoint is correct
+   - Verify database is accessible
+   - Check if database endpoint is correct
 
 3. **CORS Issues**:
    - Update CORS_ORIGIN to your actual Render URL
@@ -150,15 +135,15 @@ After deployment, update your frontend environment variables:
 # Check build logs
 # View in Render dashboard
 
-# Test AWS RDS connection locally
-mysql -h your-rds-endpoint -u admin -p virtual_wall_decor
+# Test database connection locally
+mysql -h your-database-host -u your-username -p virtual_wall_decor
 
 # Check environment variables
 echo $DB_HOST
 echo $JWT_SECRET
 
-# Test AWS RDS connectivity
-telnet your-rds-endpoint 3306
+# Test database connectivity
+telnet your-database-host 3306
 ```
 
 ## Post-Deployment
