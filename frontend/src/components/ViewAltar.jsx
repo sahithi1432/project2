@@ -14,13 +14,37 @@ function ViewAltar() {
   useEffect(() => {
     async function fetchAltar() {
       try {
-        console.log('API Base URL:', getApiUrl());
+        const apiBaseUrl = getApiUrl();
+        console.log('API Base URL:', apiBaseUrl);
         console.log('Fetching altar with params:', { id, token });
+        
+        // Test the API endpoint directly
+        const testUrl = `${apiBaseUrl}/health`;
+        console.log('Testing API health endpoint:', testUrl);
+        try {
+          const healthResponse = await fetch(testUrl);
+          console.log('Health check response:', healthResponse.status, healthResponse.ok);
+        } catch (healthError) {
+          console.error('Health check failed:', healthError);
+        }
+        
         let data;
         if (token) {
           // Fetch by share token (public access)
           console.log('Fetching by share token:', token);
-          data = await wallAPI.getDesignByToken(token);
+          const shareUrl = `${apiBaseUrl}/wall/shared/${token}`;
+          console.log('Share URL:', shareUrl);
+          
+          const response = await fetch(shareUrl);
+          console.log('Share response status:', response.status);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Share API error:', response.status, errorText);
+            throw new Error(`Failed to fetch shared altar: ${response.status} ${errorText}`);
+          }
+          
+          data = await response.json();
         } else if (id) {
           // Fetch by ID (requires authentication)
           console.log('Fetching by ID:', id);

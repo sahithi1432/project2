@@ -19,6 +19,13 @@ export const config = {
   ENABLE_NOTIFICATIONS: import.meta.env.VITE_ENABLE_NOTIFICATIONS !== 'false',
 };
 
+// Debug environment variables
+console.log('Environment Variables Debug:');
+console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+console.log('PROD:', import.meta.env.PROD);
+console.log('DEV:', import.meta.env.DEV);
+console.log('Final API_BASE_URL:', config.API_BASE_URL);
+
 // Helper function to get API URL
 export const getApiUrl = () => config.API_BASE_URL;
 
