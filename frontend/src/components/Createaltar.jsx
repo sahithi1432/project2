@@ -13,20 +13,22 @@ import './Createaltar.css';
 // Function to fix image paths from saved altar data
 const fixImagePaths = (wallData) => {
   if (!wallData) return wallData;
-  
-  // Create a mapping of old paths to new imported URLs
-  const pathMapping = {
-    '/src/assets/defaults/table.png': altarCategories.find(cat => cat.name === 'Tables')?.items[0]?.src,
-    '/src/assets/defaults/frame.png': altarCategories.find(cat => cat.name === 'Frames')?.items[0]?.src,
-    '/src/assets/defaults/frame4.png': altarCategories.find(cat => cat.name === 'Frames')?.items[1]?.src,
-    '/src/assets/defaults/garland1.png': altarCategories.find(cat => cat.name === 'Garlands')?.items[0]?.src,
-    '/src/assets/defaults/candle1.png': altarCategories.find(cat => cat.name === 'Candles')?.items[0]?.src,
-    '/src/assets/defaults/wall.jpeg': altarCategories.find(cat => cat.name === 'Background')?.items[0]?.src,
-    '/src/assets/defaults/wall1.webp': altarCategories.find(cat => cat.name === 'Background')?.items[1]?.src,
-    '/src/assets/defaults/wall2.jpg': altarCategories.find(cat => cat.name === 'Background')?.items[2]?.src,
-    '/src/assets/defaults/wall3.webp': altarCategories.find(cat => cat.name === 'Background')?.items[3]?.src,
-    '/src/assets/defaults/wall4.webp': altarCategories.find(cat => cat.name === 'Background')?.items[4]?.src,
-  };
+
+  // Dynamically create a mapping of old paths to new imported URLs for all items
+  const pathMapping = {};
+  altarCategories.forEach(cat => {
+    cat.items.forEach(item => {
+      // Try to extract the filename from the imported src
+      if (item.src && typeof item.src === 'string') {
+        // Support both .png, .jpg, .jpeg, .webp
+        const match = item.src.match(/\/defaults\/(.+\.(png|jpg|jpeg|webp))/);
+        if (match) {
+          const relPath = `/src/assets/defaults/${match[1]}`;
+          pathMapping[relPath] = item.src;
+        }
+      }
+    });
+  });
 
   // Fix wall background
   if (wallData.wallBg && pathMapping[wallData.wallBg]) {
@@ -110,7 +112,7 @@ function Createaltar({ editModeShare = false }) {
 
   useEffect(() => {
     if (editModeShare && editToken) {
-      // Load altar by edit token
+      // Load altar by edit token for shared edit mode
       wallAPI.getDesignByEditToken(editToken).then((altar) => {
         if (altar && altar.wall_data) {
           const wallData = typeof altar.wall_data === 'string' ? JSON.parse(altar.wall_data) : altar.wall_data;
@@ -123,13 +125,18 @@ function Createaltar({ editModeShare = false }) {
           setshape(fixedWallData.shape || "rectangle");
           setImgWidth(fixedWallData.imgwidth || 100);
           setImgHeight(fixedWallData.imgheight || 100);
-          setImages(
-            Object.fromEntries(
-              Object.entries(fixedWallData.images || {}).map(([key, img]) => [key, { ...img, src: img.src }])
-            )
-          );
+          // Fix: handle both array and object for images
+          let imgObj = {};
+          if (Array.isArray(fixedWallData.images)) {
+            fixedWallData.images.forEach((img, idx) => {
+              imgObj[idx] = { ...img };
+            });
+          } else if (typeof fixedWallData.images === 'object' && fixedWallData.images !== null) {
+            imgObj = { ...fixedWallData.images };
+          }
+          setImages(imgObj);
           setAltarId(altar.id || null);
-          setWallName(altar.wall_name || ''); // <-- set wallName from loaded altar
+          setWallName(altar.wall_name || '');
         }
       });
     }

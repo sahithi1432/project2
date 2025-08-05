@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { authAPI } from "../services/api";
 import "./signup.css";
 
 function Signup(){
     const navigate=useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
     const[username,setusername]=useState("");
     const[mail,setmail]=useState("");
     const[password,setpassword]=useState("");
@@ -105,7 +107,7 @@ function Signup(){
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response.user));
             alert("Signup successful!");
-            navigate("/");
+            navigate(from, { replace: true });
         } catch (error) {
             setError(error.message || "Signup failed");
         } finally {

@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { authAPI } from "../services/api";
 import "./login.css";
 
 function Login(){
     const navigate=useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
     const[mail,setmail]=useState("");
     const[password,setpassword]=useState("");
     const[loading,setLoading]=useState(false);
@@ -31,7 +33,7 @@ function Login(){
             }
             
             alert("Login successful!");
-            navigate("/");
+            navigate(from, { replace: true });
         } catch (error) {
             setError(error.message || "Login failed");
         } finally {

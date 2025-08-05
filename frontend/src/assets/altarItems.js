@@ -40,6 +40,16 @@ import wall5Img from './defaults/wall4.webp';
 // Vite-compatible static URLs for images
 export const altarCategories = [
   {
+    name: "Background",
+    items: [
+      { name: "Wall 1", src: wall1Img },
+      { name: "Wall 2", src: wall2Img },
+      { name: "Wall 3", src: wall3Img },
+      { name: "Wall 4", src: wall4Img },
+      { name: "Wall 5", src: wall5Img },
+    ]
+  },
+  {
     name: "Tables",
     items: [
       { name: "Table", src: tableImg },
@@ -103,16 +113,6 @@ export const altarCategories = [
     items: [
       { name: "Fruits", src: fruitsImg },
       { name: "Fruits 1", src: fruits1Img },
-    ]
-  },
-  {
-    name: "Background",
-    items: [
-      { name: "Wall 1", src: wall1Img },
-      { name: "Wall 2", src: wall2Img },
-      { name: "Wall 3", src: wall3Img },
-      { name: "Wall 4", src: wall4Img },
-      { name: "Wall 5", src: wall5Img },
     ]
   },
 ]; 

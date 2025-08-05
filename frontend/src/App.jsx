@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Home from "./components/Home";
@@ -103,12 +103,12 @@ function AutoLogoutWrapper({ children }) {
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('token');
   const user = localStorage.getItem('user');
-  
+  const location = useLocation();
+
   if (!token || !user) {
-    // Redirect to login if not authenticated
-    return <Navigate to="/Login" replace />;
+    // Redirect to login if not authenticated, preserving intended destination
+    return <Navigate to="/Login" replace state={{ from: location }} />;
   }
-  
   return children;
 }
 
@@ -145,6 +145,12 @@ function App(){
               <Route path="/Createaltar" element={
                 <ProtectedRoute>
                   <Createaltar />
+                </ProtectedRoute>
+              } />
+              {/* Add shared edit route */}
+              <Route path="/edit-altar/:editToken" element={
+                <ProtectedRoute>
+                  <Createaltar editModeShare={true} />
                 </ProtectedRoute>
               } />
               <Route path="/profile" element={
