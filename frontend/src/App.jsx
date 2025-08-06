@@ -12,6 +12,7 @@ import ViewAltar from "./components/ViewAltar";
 import ManageSubscriptions from "./components/ManageSubscriptions";
 import BillingHistory from "./components/BillingHistory";
 import DebugRoute from "./components/DebugRoute";
+import SharedEditRedirect from "./components/SharedEditRedirect";
 import { AlertProvider } from "./context/AlertContext";
 import "./App.css";
 
@@ -149,18 +150,9 @@ function App(){
                   <Createaltar />
                 </ProtectedRoute>
               } />
-              {/* Add shared edit route (legacy) */}
-              <Route path="/edit-altar/:editToken" element={
-                <ProtectedRoute>
-                  <Createaltar editModeShare={true} />
-                </ProtectedRoute>
-              } />
-              {/* Add new route for /createaltar/edit/:editToken to match share link */}
-              <Route path="/createaltar/edit/:editToken" element={
-                <ProtectedRoute>
-                  <Createaltar editModeShare={true} />
-                </ProtectedRoute>
-              } />
+              {/* Shared edit link - redirect to home with edit token for authentication */}
+              <Route path="/edit-altar/:editToken" element={<SharedEditRedirect />} />
+              <Route path="/createaltar/edit/:editToken" element={<SharedEditRedirect />} />
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <Profile />
@@ -189,7 +181,8 @@ function App(){
               
               {/* Public Routes - No Authentication Required */}
               <Route path="/altar/shared/:token" element={<ViewAltar />} />
-              <Route path="/altar/edit/:editToken" element={<Createaltar editModeShare={true} />} />
+              {/* Shared edit link - redirect to home with edit token */}
+              <Route path="/altar/edit/:editToken" element={<SharedEditRedirect />} />
               
               {/* Debug Route */}
               <Route path="/debug" element={<DebugRoute />} />

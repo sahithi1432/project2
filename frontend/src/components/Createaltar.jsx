@@ -61,8 +61,13 @@ function Createaltar({ editModeShare = false }) {
   const menuRef = useRef(null);
   const [showWallProps, setShowWallProps] = useState(false);
   const [showImageProps, setShowImageProps] = useState(false);
-  const { editToken } = useParams();
+  const { editToken: routeEditToken } = useParams();
   const { showSuccess, showError, showWarning, showInfo } = useAlert();
+
+  // Check for editToken in both route params and query params
+  const urlParams = new URLSearchParams(location.search);
+  const queryEditToken = urlParams.get('editToken');
+  const editToken = routeEditToken || queryEditToken;
 
   // Subscription check
   const [subscription, setSubscription] = useState(null);
@@ -123,8 +128,8 @@ function Createaltar({ editModeShare = false }) {
   }, [navigate, location.state]);
 
   useEffect(() => {
-    if (editModeShare && editToken) {
-      // Load altar by edit token for shared edit mode
+    if (editToken) {
+      // Load altar by edit token for shared edit mode (automatically enable edit mode)
       wallAPI.getDesignByEditToken(editToken).then((altar) => {
         if (altar && altar.wall_data) {
           const wallData = typeof altar.wall_data === 'string' ? JSON.parse(altar.wall_data) : altar.wall_data;

@@ -8,6 +8,10 @@ function Signup(){
     const location = useLocation();
     // Ensure 'from' is always a location object, not just a string
     const from = location.state?.from || { pathname: "/" };
+    
+    // Check for editToken in URL parameters
+    const urlParams = new URLSearchParams(location.search);
+    const editToken = urlParams.get('editToken');
     const[username,setusername]=useState("");
     const[mail,setmail]=useState("");
     const[password,setpassword]=useState("");
@@ -108,7 +112,13 @@ function Signup(){
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response.user));
             alert("Signup successful!");
-            navigate(from, { replace: true });
+            
+            // If there's an editToken, redirect to create altar with edit mode
+            if (editToken) {
+                navigate(`/Createaltar?editToken=${editToken}`, { replace: true });
+            } else {
+                navigate(from, { replace: true });
+            }
         } catch (error) {
             setError(error.message || "Signup failed");
         } finally {

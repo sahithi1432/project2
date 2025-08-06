@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import "./Home.css";
 import { getApiUrl } from '../config/environment.js';
@@ -9,8 +9,14 @@ function Home(){
     const isLoggedIn = !!user.id;
     const isAdmin = user.role === 'admin';
     const navigate = useNavigate();
+    const location = useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
+    
+    // Check if this is a shared edit link access
+    const urlParams = new URLSearchParams(location.search);
+    const editToken = urlParams.get('editToken');
+    const isSharedEditAccess = !!editToken;
 
     // Contact form states
     const [contactForm, setContactForm] = useState({
@@ -23,8 +29,11 @@ function Home(){
 
     // Component mounted effect
     useEffect(() => {
-        // Component initialization logic can go here if needed
-    }, [isLoggedIn, isAdmin]);
+        // If user is already logged in and this is a shared edit access, redirect to create altar
+        if (isLoggedIn && isSharedEditAccess) {
+            navigate(`/Createaltar?editToken=${editToken}`, { replace: true });
+        }
+    }, [isLoggedIn, isAdmin, isSharedEditAccess, editToken, navigate]);
 
     const handleLogout = () => logout(navigate);
 
@@ -94,7 +103,7 @@ function Home(){
                         </div>
                     </div>
                     <div className="header-menu">
-                        {!isLoggedIn && (
+                        {!isLoggedIn && !isSharedEditAccess && (
                             <>
                                 <button className="header-btn secondary" onClick={() => navigate('/Login')}>Login</button>
                                 <button className="header-btn primary" onClick={() => navigate('/Signup')}>Get Started</button>
@@ -139,20 +148,41 @@ function Home(){
             <section className="hero-section">
                 <div className="hero-content">
                     <div className="hero-text" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-                        <h1 className="hero-title">
-                            Create Beautiful Virtual Altars
-                        </h1>
-                        <p className="hero-subtitle">
-                            Honor your loved ones with personalized digital memorials. Upload photos, add meaningful items, and share memories with family and friends.
-                        </p>
-                        <div className="hero-buttons">
-                            <button className="hero-btn primary" onClick={() => navigate('/Createaltar')}>
-                                Start Creating
-                            </button>
-                            <button className="hero-btn secondary" onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}>
-                                Learn More
-                            </button>
-                        </div>
+                        {isSharedEditAccess && !isLoggedIn ? (
+                            <>
+                                <h1 className="hero-title">
+                                    You've Been Invited to Edit an Altar
+                                </h1>
+                                <p className="hero-subtitle">
+                                    Someone has shared their altar with you for editing. Please log in or create an account to continue.
+                                </p>
+                                <div className="hero-buttons">
+                                    <button className="hero-btn primary" onClick={() => navigate(`/Login?editToken=${editToken}`)}>
+                                        Login to Edit
+                                    </button>
+                                    <button className="hero-btn secondary" onClick={() => navigate(`/Signup?editToken=${editToken}`)}>
+                                        Create Account
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <h1 className="hero-title">
+                                    Create Beautiful Virtual Altars
+                                </h1>
+                                <p className="hero-subtitle">
+                                    Honor your loved ones with personalized digital memorials. Upload photos, add meaningful items, and share memories with family and friends.
+                                </p>
+                                <div className="hero-buttons">
+                                    <button className="hero-btn primary" onClick={() => navigate('/Createaltar')}>
+                                        Start Creating
+                                    </button>
+                                    <button className="hero-btn secondary" onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}>
+                                        Learn More
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>
