@@ -128,13 +128,24 @@ router.post('/signup', async (req, res) => {
     }
     delete otpStore[email];
 
-    const [existingUsers] = await pool.promise().execute(
+    // Check for existing email
+    const [existingEmailUsers] = await pool.promise().execute(
       'SELECT * FROM users WHERE email = ?',
       [email]
     );
 
-    if (existingUsers.length > 0) {
-      return res.status(400).json({ message: 'An account with this email already exists. Please log in or use a different email.' });
+    if (existingEmailUsers.length > 0) {
+      return res.status(400).json({ message: 'Email already exists. Please use a different email address.' });
+    }
+
+    // Check for existing username
+    const [existingUsernameUsers] = await pool.promise().execute(
+      'SELECT * FROM users WHERE username = ?',
+      [username]
+    );
+
+    if (existingUsernameUsers.length > 0) {
+      return res.status(400).json({ message: 'Username already exists. Please choose a different username.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -718,10 +729,16 @@ router.post('/users', authenticateToken, async (req, res) => {
   if (!username || !email || !password || !role) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
-  // Check if user exists
-  const [existing] = await pool.promise().execute('SELECT id FROM users WHERE email = ?', [email]);
-  if (existing.length > 0) {
-    return res.status(400).json({ message: 'A user with this email already exists.' });
+  // Check for existing email
+  const [existingEmail] = await pool.promise().execute('SELECT id FROM users WHERE email = ?', [email]);
+  if (existingEmail.length > 0) {
+    return res.status(400).json({ message: 'Email already exists. Please use a different email address.' });
+  }
+  
+  // Check for existing username
+  const [existingUsername] = await pool.promise().execute('SELECT id FROM users WHERE username = ?', [username]);
+  if (existingUsername.length > 0) {
+    return res.status(400).json({ message: 'Username already exists. Please choose a different username.' });
   }
   const bcrypt = (await import('bcryptjs')).default;
   const hashedPassword = await bcrypt.hash(password, 12);
