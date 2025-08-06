@@ -168,6 +168,50 @@
   font-size: 1.2rem;
 }
 
+/* Custom Background Upload Styles */
+.upload-background-card {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+  border: 2px solid rgba(255, 193, 7, 0.3);
+}
+
+.upload-background-card:hover {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
+  border-color: rgba(255, 193, 7, 0.5);
+  transform: translateY(-2px);
+}
+
+.upload-background-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #d97706;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.upload-background-icon {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.premium-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #92400e;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Categories Section */
 .createaltar-category {
   margin-bottom: 1.5rem;
@@ -188,6 +232,16 @@
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
   border: 1px solid rgba(99, 102, 241, 0.1);
   backdrop-filter: blur(5px);
+}
+
+.free-plan-indicator {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  margin-left: 0.5rem;
 }
 
 .createaltar-category-header:hover {

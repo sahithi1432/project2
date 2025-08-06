@@ -611,7 +611,7 @@ router.post('/subscribe', authenticateToken, async (req, res) => {
   if (plan === 'free') {
     endDateSql = `DATE_ADD(NOW(), INTERVAL 10 DAY)`;
   } else if (plan === 'basic') {
-    endDateSql = `DATE_ADD(NOW(), INTERVAL 7 DAY)`;
+    endDateSql = `DATE_ADD(NOW(), INTERVAL 1 MONTH)`;
   } else if (plan === 'silver') {
     endDateSql = `DATE_ADD(NOW(), INTERVAL 3 MONTH)`;
   } else if (plan === 'gold') {

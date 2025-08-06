@@ -67,6 +67,17 @@ function Createaltar({ editModeShare = false }) {
   // Subscription check
   const [subscription, setSubscription] = useState(null);
   const [subLoading, setSubLoading] = useState(true);
+  // Track how many items of each category the user has added
+  const [usedItems, setUsedItems] = useState({
+    'Background': 0,
+    'Tables': 0,
+    'Frames': 0,
+    'Garlands': 0,
+    'Wall Garlands': 0,
+    'Candles': 0,
+    'Bouquets': 0,
+    'Fruits': 0
+  });
 
   useEffect(() => {
     subscriptionAPI.getSubscription().then(sub => {
@@ -259,6 +270,19 @@ function Createaltar({ editModeShare = false }) {
         showError('Please login first to save your altar. User data not found.');
         return;
       }
+
+      // Check wall count limit for free plan
+      if (subscription?.subscription_plan === 'free' && !altarId) {
+        try {
+          const userAltars = await wallAPI.getUserDesigns(user.id);
+          if (userAltars.length >= 3) {
+            showError('Free plan allows only 3 altars. Please upgrade to create more altars.');
+            return;
+          }
+        } catch (error) {
+          console.error('Error checking wall count:', error);
+        }
+      }
       
       const wallData = {
         width,
@@ -444,6 +468,45 @@ function Createaltar({ editModeShare = false }) {
           )}
         </div>
 
+        {/* Custom Background Upload for Premium Members */}
+        <div className="createaltar-properties-card upload-background-card">
+          <input
+            id="upload-background-input"
+            type="file"
+            accept="image/*"
+            className="createaltar-hidden-input"
+            onChange={async e => {
+              const file = e.target.files[0];
+              if (file) {
+                try {
+                  const base64 = await fileToBase64(file);
+                  setWallBg(base64);
+                  showSuccess('Custom background uploaded successfully!');
+                } catch (error) {
+                  console.error('Error uploading background:', error);
+                  showError('Failed to upload background. Please try again.');
+                }
+              }
+            }}
+          />
+          <label 
+            htmlFor="upload-background-input" 
+            className="upload-background-label"
+            onClick={(e) => {
+              // Check if user is on free plan
+              if (subscription?.subscription_plan === 'free') {
+                e.preventDefault(); // Prevent file dialog from opening
+                setShowUpgradeMsg(true);
+                return;
+              }
+            }}
+          >
+            <span role="img" aria-label="upload background" className="upload-background-icon">🎨</span>
+            <span>Upload Custom Background</span>
+            <span className="premium-badge">Premium</span>
+          </label>
+        </div>
+
         {/* Image Properties */}
         <div className="createaltar-properties-card">
           <div 
@@ -524,16 +587,55 @@ function Createaltar({ editModeShare = false }) {
               onClick={() => setExpandedCategory(expandedCategory === cat.name ? null : cat.name)}
             >
               {cat.name}
+                             {subscription?.subscription_plan === 'free' && (
+                 <span className="free-plan-indicator">
+                   {(() => {
+                     const freePlanLimits = {
+                       'Background': 5,
+                       'Tables': 2,
+                       'Frames': 2,
+                       'Garlands': 2,
+                       'Wall Garlands': 1,
+                       'Candles': 2,
+                       'Bouquets': 2,
+                       'Fruits': 1
+                     };
+                     const limit = freePlanLimits[cat.name] || 0;
+                     const used = usedItems[cat.name] || 0;
+                     const remaining = limit - used;
+                     return limit > 0 ? ` (${remaining} remaining)` : '';
+                   })()}
+                 </span>
+               )}
               <span>{expandedCategory === cat.name ? '▾' : '▸'}</span>
             </div>
             {expandedCategory === cat.name && (
               <div className="createaltar-category-content">
                 {cat.items.map((item, i) => (
                   <div key={item.name} className="createaltar-item" onClick={() => {
-                    if (subscription?.subscription_plan === 'free' && cat.name !== 'Background') {
-                      setShowUpgradeMsg(true);
-                      return;
+                    // Free plan restrictions: check if user has reached their limit for this category
+                    if (subscription?.subscription_plan === 'free') {
+                      const freePlanLimits = {
+                        'Background': 5, // All backgrounds available
+                        'Tables': 2,     // Only 2 tables total
+                        'Frames': 2,     // Only 2 frames total
+                        'Garlands': 2,   // Only 2 garlands total
+                        'Wall Garlands': 1, // Only 1 wall garland
+                        'Candles': 2,    // Only 2 candles total
+                        'Bouquets': 2,   // Only 2 bouquets total
+                        'Fruits': 1      // Only 1 fruit
+                      };
+                      
+                      const categoryLimit = freePlanLimits[cat.name] || 0;
+                      const currentUsed = usedItems[cat.name] || 0;
+                      
+                      if (currentUsed >= categoryLimit) {
+                        setShowUpgradeMsg(true);
+                        return;
+                      }
                     }
+                    
+                    // Add the item
                     if (cat.name === 'Background') {
                       setWallBg(item.src);
                     } else {
@@ -543,9 +645,34 @@ function Createaltar({ editModeShare = false }) {
                           ...prev,
                           [key]: { src: item.src, x: 10, y: 10, w: imgwidth, h: imgheight, shape: shape, z: maxZ + 1 }
                         }));
+                        
+                        // Increment the used count for this category (only for free users)
+                        if (subscription?.subscription_plan === 'free') {
+                          setUsedItems(prev => ({
+                            ...prev,
+                            [cat.name]: (prev[cat.name] || 0) + 1
+                          }));
+                        }
                     }
                   }}>
-                    <img src={item.src} alt={item.name} style={{ filter: subscription?.subscription_plan === 'free' && cat.name !== 'Background' ? 'grayscale(1)' : 'none' }} />
+                    <img src={item.src} alt={item.name} style={{ 
+                      filter: subscription?.subscription_plan === 'free' && 
+                      (() => {
+                        const freePlanLimits = {
+                          'Background': 5,
+                          'Tables': 2,
+                          'Frames': 2,
+                          'Garlands': 2,
+                          'Wall Garlands': 1,
+                          'Candles': 2,
+                          'Bouquets': 2,
+                          'Fruits': 1
+                        };
+                        const categoryLimit = freePlanLimits[cat.name] || 0;
+                        const currentUsed = usedItems[cat.name] || 0;
+                        return currentUsed >= categoryLimit;
+                      })() ? 'grayscale(1)' : 'none' 
+                    }} />
                     <div className="createaltar-item-name">{item.name}</div>
                 </div>
                 ))}

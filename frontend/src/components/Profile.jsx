@@ -38,7 +38,8 @@ function Profile() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const shareMenuRef = useRef(null);
-  const [subscription, setSubscription] = useState('none');
+  const [subscription, setSubscription] = useState(null);
+  const [subLoading, setSubLoading] = useState(true);
   const [subError, setSubError] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
@@ -113,11 +114,13 @@ function Profile() {
     }
     // Fetch subscription status
     subscriptionAPI.getSubscription().then(res => {
-      setSubscription(res.subscription_plan || 'none');
+      setSubscription(res.subscription_plan || 'free');
       setSubscriptionEnd(res.subscription_end || null);
+      setSubLoading(false);
     }).catch(() => {
-      setSubscription('none');
+      setSubscription('free');
       setSubscriptionEnd(null);
+      setSubLoading(false);
     });
     
     // Fetch billing history
@@ -544,11 +547,19 @@ function Profile() {
           {activeTab === 'profile' && (
             <section>
               <div className="profile-avatar-section">
-                <img
-                  src={user.profile_photo || profilePhoto || 'https://ui-avatars.com/api/?name=User&background=8B5CF6&color=fff&rounded=true&size=128'}
-                  alt="avatar"
-                  className="profile-avatar"
-                />
+                <div className="profile-avatar-container">
+                  <img
+                    src={user.profile_photo || profilePhoto || 'https://ui-avatars.com/api/?name=User&background=8B5CF6&color=fff&rounded=true&size=128'}
+                    alt="avatar"
+                    className="profile-avatar"
+                  />
+                  {!subLoading && subscription && subscription !== 'free' && (
+                    <div className="profile-premium-badge">
+                      <span className="premium-badge-icon">👑</span>
+                      <span className="premium-badge-text">Premium</span>
+                    </div>
+                  )}
+                </div>
                 <div className="profile-avatar-buttons">
                   <label className="profile-upload-label">
                     Upload Photo
@@ -937,7 +948,7 @@ function Profile() {
                 <div className="subscription-plan-card">
                   <div className="subscription-plan-icon">💎</div>
                   <div className="subscription-plan-title">Free</div>
-                  <div className="subscription-plan-description">Access limited features for free</div>
+                  <div className="subscription-plan-description">Create up to 3 altars with basic features</div>
                   {subscription === 'free' ? (
                     <div className="subscription-current-plan">✔ Current Plan</div>
                   ) : (
@@ -973,10 +984,10 @@ function Profile() {
               
               <div className="subscription-premium-container">
                 {[
-                  { name: 'basic', display: 'Basic', icon: '⭐', price: '₹99/month', features: ['✅ Unlimited Walls', '✅ Sharing'] },
-                  { name: 'silver', display: 'Silver', icon: '📅', price: '₹249/3 months', features: ['✅ Unlimited Walls', '✅ Sharing'] },
-                  { name: 'gold', display: 'Gold', icon: '🗓️', price: '₹449/6 months', features: ['✅ Unlimited Walls', '✅ Sharing'] },
-                  { name: 'platinum', display: 'Platinum', icon: '🏆', price: '₹799/year', features: ['✅ Unlimited Walls', '✅ Sharing'] },
+                  { name: 'basic', display: 'Basic', icon: '⭐', price: '₹99/month', features: ['✅ Unlimited Altars', '✅ All Design Elements', '✅ Custom Background Upload', '✅ Sharing & Export'] },
+                  { name: 'silver', display: 'Silver', icon: '📅', price: '₹249/3 months', features: ['✅ Unlimited Altars', '✅ All Design Elements', '✅ Custom Background Upload', '✅ Sharing & Export', '✅ Advanced Templates'] },
+                  { name: 'gold', display: 'Gold', icon: '🗓️', price: '₹449/6 months', features: ['✅ Unlimited Altars', '✅ All Design Elements', '✅ Custom Background Upload', '✅ Sharing & Export', '✅ Advanced Templates', '✅ Custom Uploads'] },
+                  { name: 'platinum', display: 'Platinum', icon: '🏆', price: '₹799/year', features: ['✅ Unlimited Altars', '✅ All Design Elements', '✅ Custom Background Upload', '✅ Sharing & Export', '✅ Advanced Templates', '✅ Custom Uploads', '✅ Exclusive Designs'] },
                 ].map(plan => {
                   const isCurrent = subscription === plan.name;
                   return (
