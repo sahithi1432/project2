@@ -821,5 +821,114 @@ This message was sent from the DreamWall contact form.
   }
 });
 
+// GET /users - Fetch all users (admin only)
+router.get('/users', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    const [adminCheck] = await pool.promise().execute(
+      'SELECT role FROM users WHERE id = ?', 
+      [req.user.userId]
+    );
+    
+    if (!adminCheck.length || adminCheck[0].role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    // Fetch all users
+    const [users] = await pool.promise().execute(
+      'SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC'
+    );
+
+    res.json(users);
+  } catch (error) {
+    console.error('Fetch users error:', error);
+    res.status(500).json({ message: 'Failed to fetch users.' });
+  }
+});
+
+// DELETE /users/:id - Delete a user (admin only)
+router.delete('/users/:id', authenticateToken, async (req, res) => {
+  try {
+    const userIdToDelete = parseInt(req.params.id, 10);
+    
+    // Check if user is admin
+    const [adminCheck] = await pool.promise().execute(
+      'SELECT role FROM users WHERE id = ?', 
+      [req.user.userId]
+    );
+    
+    if (!adminCheck.length || adminCheck[0].role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    // Prevent admin from deleting themselves
+    if (userIdToDelete === req.user.userId) {
+      return res.status(400).json({ message: 'You cannot delete your own account.' });
+    }
+
+    // Check if user exists
+    const [userCheck] = await pool.promise().execute(
+      'SELECT id, username FROM users WHERE id = ?', 
+      [userIdToDelete]
+    );
+    
+    if (!userCheck.length) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Delete user's walls first (foreign key constraint)
+    await pool.promise().execute('DELETE FROM walls WHERE user_id = ?', [userIdToDelete]);
+    
+    // Delete user's subscriptions
+    await pool.promise().execute('DELETE FROM subscriptions WHERE user_id = ?', [userIdToDelete]);
+    
+    // Delete the user
+    await pool.promise().execute('DELETE FROM users WHERE id = ?', [userIdToDelete]);
+
+    res.json({ message: `User ${userCheck[0].username} deleted successfully.` });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ message: 'Failed to delete user.' });
+  }
+});
+
+// POST /verify-password - Verify admin password
+router.post('/verify-password', authenticateToken, async (req, res) => {
+  try {
+    const { password } = req.body;
+    
+    if (!password) {
+      return res.status(400).json({ message: 'Password is required.' });
+    }
+
+    // Get current user's password hash
+    const [users] = await pool.promise().execute(
+      'SELECT password, role FROM users WHERE id = ?', 
+      [req.user.userId]
+    );
+    
+    if (!users.length) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Check if user is admin
+    if (users[0].role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, users[0].password);
+    
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Invalid password.' });
+    }
+
+    res.json({ message: 'Password verified successfully.' });
+  } catch (error) {
+    console.error('Verify password error:', error);
+    res.status(500).json({ message: 'Failed to verify password.' });
+  }
+});
+
 export { authenticateToken };
 export default router; 

@@ -189,15 +189,42 @@ function UsersSection() {
     setActionLoading(true);
     setActionError('');
     try {
+      console.log('Attempting to delete user:', user.id);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in again.');
+      }
+      
       const res = await fetch(`${getApiUrl()}/auth/users/${user.id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
-      if (!res.ok) throw new Error('Failed to delete user');
+      
+      console.log('Delete response status:', res.status);
+      
+      if (!res.ok) {
+        let errorMessage = 'Failed to delete user';
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (parseError) {
+          console.error('Error parsing response:', parseError);
+        }
+        throw new Error(`${errorMessage} (Status: ${res.status})`);
+      }
+      
+      const result = await res.json();
+      console.log('Delete successful:', result);
+      
       fetchUsers();
       alert('User deleted successfully.');
     } catch (err) {
+      console.error('Delete user error:', err);
       setActionError(err.message);
+      alert(`Error deleting user: ${err.message}`);
     } finally {
       setActionLoading(false);
     }
@@ -230,7 +257,7 @@ function UsersSection() {
         return;
       }
       // Create user (admin bypasses OTP, so use a special endpoint or allow admin to create directly)
-              const res2 = await fetch(`http://localhost:5000/api/auth/users`, {
+              const res2 = await fetch(`${getApiUrl()}/auth/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
