@@ -317,8 +317,8 @@ function Createaltar({ editModeShare = false }) {
         interest = prompt('Enter a theme or interest for your altar (optional):', '');
       }
 
-      // If in editModeShare and editToken is present, update altar by editToken (shared edit link)
-      if (editModeShare && editToken) {
+      // If editToken is present, this is a shared edit - save to both sender and receiver
+      if (editToken) {
         // Save to sender's altar (by editToken)
         await wallAPI.updateDesignByEditToken(editToken, {
           wallName: finalWallName.trim(),
