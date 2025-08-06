@@ -291,7 +291,7 @@ function Profile() {
         link = `${window.location.origin}/#/altar/shared/${share_token}`;
       } else if (mode === 'edit') {
         const { edit_token } = await wallAPI.generateEditToken(altar.id);
-        link = `${window.location.origin}/#/altar/edit/${edit_token}`;
+        link = `${window.location.origin}/#/createaltar/edit/${edit_token}`;
       }
       setShareModal({ ...shareModal, mode, link });
     } catch (err) {

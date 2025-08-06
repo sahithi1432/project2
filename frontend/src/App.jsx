@@ -26,6 +26,7 @@ function AutoLogoutWrapper({ children }) {
   const TIMEOUT_MS = TIMEOUT_MINUTES * 60 * 1000;
   const WARNING_MS = WARNING_MINUTES * 60 * 1000;
 
+  const location = useLocation();
   const resetTimer = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -33,10 +34,11 @@ function AutoLogoutWrapper({ children }) {
     if (warningTimeoutRef.current) {
       clearTimeout(warningTimeoutRef.current);
     }
-    
-    // Only set timer if user is logged in
+    // Only set timer if user is logged in and not on login/signup page
     const token = localStorage.getItem('token');
-    if (token) {
+    const path = location.pathname;
+    const isAuthPage = path === '/Login' || path === '/Signup';
+    if (token && !isAuthPage) {
       // Set warning timeout (5 minutes before logout)
       warningTimeoutRef.current = setTimeout(() => {
         const shouldContinue = window.confirm(
@@ -147,8 +149,14 @@ function App(){
                   <Createaltar />
                 </ProtectedRoute>
               } />
-              {/* Add shared edit route */}
+              {/* Add shared edit route (legacy) */}
               <Route path="/edit-altar/:editToken" element={
+                <ProtectedRoute>
+                  <Createaltar editModeShare={true} />
+                </ProtectedRoute>
+              } />
+              {/* Add new route for /createaltar/edit/:editToken to match share link */}
+              <Route path="/createaltar/edit/:editToken" element={
                 <ProtectedRoute>
                   <Createaltar editModeShare={true} />
                 </ProtectedRoute>

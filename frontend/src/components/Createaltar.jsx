@@ -90,7 +90,8 @@ function Createaltar({ editModeShare = false }) {
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
     if (!token || !userStr) {
-      navigate('/Login');
+      // Always redirect to Login with correct 'from' state for all unauthenticated access
+      navigate('/Login', { state: { from: location }, replace: true });
       return;
     }
     // Load altar from navigation state if present
@@ -264,26 +265,13 @@ function Createaltar({ editModeShare = false }) {
   const handleSaveAltar = async () => {
     try {
       showInfo('saving');
-      
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user || !user.id) {
         showError('Please login first to save your altar. User data not found.');
         return;
       }
 
-      // Check wall count limit for free plan
-      if (subscription?.subscription_plan === 'free' && !altarId) {
-        try {
-          const userAltars = await wallAPI.getUserDesigns(user.id);
-          if (userAltars.length >= 3) {
-            showError('Free plan allows only 3 altars. Please upgrade to create more altars.');
-            return;
-          }
-        } catch (error) {
-          console.error('Error checking wall count:', error);
-        }
-      }
-      
+      // Prepare altar data
       const wallData = {
         width,
         height,
@@ -305,39 +293,52 @@ function Createaltar({ editModeShare = false }) {
         imgheight,
         timestamp: new Date().toISOString()
       };
-      
+
       let interest = '';
       let finalWallName = wallName;
-      
+
       if (altarId) {
-        // Use existing name/theme for loaded altar
         interest = (typeof location.state?.altar?.wall_data === 'string'
           ? JSON.parse(location.state?.altar?.wall_data).interest
           : location.state?.altar?.wall_data?.interest) || '';
       } else {
-        // Prompt for new altar
         let newName = prompt('Enter a name for your altar:', '');
         if (!newName || newName.trim() === '') {
           showWarning('Please enter a valid name for your altar');
           return;
         }
         finalWallName = newName.trim();
-        setWallName(finalWallName); // update state for future
+        setWallName(finalWallName);
         interest = prompt('Enter a theme or interest for your altar (optional):', '');
       }
-      
+
+      // If in editModeShare and editToken is present, update altar by editToken (shared edit link)
+      if (editModeShare && editToken) {
+        // Save to sender's altar (by editToken)
+        await wallAPI.updateDesignByEditToken(editToken, {
+          wallName: finalWallName.trim(),
+          wallData: { ...wallData, interest: interest || '' }
+        });
+        // Save a copy to receiver's DB (current user)
+        await wallAPI.saveDesign({
+          userId: user.id,
+          wallName: finalWallName.trim() + ' (Shared Edit)',
+          wallData: { ...wallData, interest: interest || '' }
+        });
+        showSuccess('Altar saved for both sender and receiver!');
+        return;
+      }
+
+      // Normal save logic
       const requestData = {
         userId: user.id,
         wallName: finalWallName.trim(),
         wallData: { ...wallData, interest: interest || '' }
       };
-      
       if (altarId) {
-        // Update existing altar
         await wallAPI.updateDesign(altarId, requestData);
         showSuccess('altarSave');
       } else {
-        // Create new altar
         await wallAPI.saveDesign(requestData);
         showSuccess('altarSave');
       }
@@ -372,6 +373,7 @@ function Createaltar({ editModeShare = false }) {
 
   // Get user and check if admin
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAuthenticated = user && user.id;
   const isAdmin = user.role === 'admin';
 
   // Overlay control handlers (object-based, not array)
@@ -391,6 +393,23 @@ function Createaltar({ editModeShare = false }) {
   const isExpired = subscription && subscription.expiry_date && new Date(subscription.expiry_date) < new Date();
 
   if (subLoading) return <div>Loading...</div>;
+  if (!isAuthenticated) {
+    // Fallback UI if router protection is missing
+    return (
+      <div style={{ maxWidth: 500, margin: '60px auto', padding: 32, background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(59,130,246,0.08)', textAlign: 'center' }}>
+        <h2 style={{ color: '#2563eb', marginBottom: 16 }}>Please Login</h2>
+        <p style={{ color: '#334155', fontSize: '1.1rem', marginBottom: 24 }}>
+          You must be logged in to edit or create an altar.<br/>
+        </p>
+        <button onClick={() => navigate('/Login', { state: { from: location } })} style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 24px', fontSize: '1rem', cursor: 'pointer', marginRight: 12 }}>
+          Login
+        </button>
+        <button onClick={() => navigate('/Signup', { state: { from: location } })} style={{ background: '#e5e7eb', color: '#374151', border: 'none', borderRadius: 6, padding: '10px 24px', fontSize: '1rem', cursor: 'pointer' }}>
+          Sign Up
+        </button>
+      </div>
+    );
+  }
   if (isExpired) {
     return (
       <div style={{ maxWidth: 500, margin: '60px auto', padding: 32, background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(59,130,246,0.08)', textAlign: 'center' }}>

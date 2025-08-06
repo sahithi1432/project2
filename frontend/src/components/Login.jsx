@@ -6,7 +6,8 @@ import "./login.css";
 function Login(){
     const navigate=useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
+    // Ensure 'from' is always a location object, not just a string
+    const from = location.state?.from || { pathname: "/" };
     const[mail,setmail]=useState("");
     const[password,setpassword]=useState("");
     const[loading,setLoading]=useState(false);
